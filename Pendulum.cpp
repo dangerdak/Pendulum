@@ -34,7 +34,7 @@ void leapfrog(const double theta_0, const double omega_0, const int n_max,
 	const double g) {
 
 	const double alpha = (lambda / m) * sqrt(1 / (l * g));
-	double theta_plus, theta_minus, omega_plus, omega_minus,
+	double theta_plus, omega_plus,
 		theta_n = theta_0, omega_n = omega_0;
 	double t = 0;
 	ofstream f("leapfrog.csv");
@@ -49,8 +49,8 @@ void leapfrog(const double theta_0, const double omega_0, const int n_max,
 			omega_plus = omega_n - (alpha + theta_n) * dt;
 		}
 		else {
-			theta_minus = theta_n;
-			omega_minus = omega_n;
+			double theta_minus = theta_n;
+			double omega_minus = omega_n;
 			theta_n = theta_plus;
 			omega_n = omega_plus;
 
