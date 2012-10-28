@@ -9,16 +9,17 @@ void euler(const double theta_0, const double omega_0, const int n_max,
 	const double g) {
 
 	const double alpha = (lambda / m) * sqrt(1 / (l * g));
-	double theta = theta_0, omega = omega_0;
+	double theta_plus = theta_0, omega = omega_0;
 	double t = 0;
 	ofstream f("euler.csv");
 		
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta << "," << omega << endl;
+		f << t << "," << theta_plus << "," << omega << endl;
 
 		t += dt;
-		theta += omega * dt;
+		double theta = theta_plus;
+		theta_plus += omega * dt;
 		omega -= (alpha + theta) * dt;
 
 	}	
