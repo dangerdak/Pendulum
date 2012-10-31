@@ -88,7 +88,7 @@ void rk4(const double theta_0, const double omega_0, const int n_max,
 		double l3 = -(alpha * (omega + 0.5 * l2) + theta + 0.5 * k2) * dt;
 		
 		double k4 = (omega + l3) * dt;
-		double l4 = (alpha * (omega + l3) + theta + k3);
+		double l4 = -(alpha * (omega + l3) + theta + k3) * dt;
 
 		double k = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
 		double l = (l1 + 2 * l2 + 2 * l3 + l4) / 6;	
