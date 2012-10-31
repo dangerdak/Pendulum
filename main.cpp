@@ -1,4 +1,5 @@
 #include "Pendulum.h"
+#include <cmath>
 
 using namespace std;
 
@@ -6,11 +7,13 @@ int main() {
 	
 	const int n_max = 400;
 	const double theta = 0.1, omega = 0;
-	const double dt = 0.1, lambda = 0, m = 1, l = 1, g = 9.8;
-	rk4(theta, omega, n_max, dt, lambda, m, l, g);
+	const double lambda = 0.2, m = 1, l = 1, g = 9.8;
+	double alpha = lambda / (m * sqrt(l * g));
+	double dt = alpha;
 
+	rk4(theta, omega, alpha, dt, n_max, g, l, m);
+	euler(theta, omega, alpha, dt, n_max, g, l, m);
+	leapfrog(theta, omega, alpha, dt, n_max, g, l, m);
 
-	euler(theta, omega, n_max, dt, lambda, m, l, g);
-	leapfrog(theta, omega, n_max, dt, lambda, m, l, g);
 	return 0;
 }

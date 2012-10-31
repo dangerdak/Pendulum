@@ -4,36 +4,33 @@
 using namespace std;
 
 //Single Pendulum Euler Method
-void euler(const double theta_0, const double omega_0, const int n_max,
-	const double dt, const double lambda, const double m, const double l, 
-	const double g) {
+void euler(const double theta_0, const double omega_0, double alpha, double dt,
+	const int n_max, const double g, const double l, const double m) {
 
-	const double alpha = (lambda / m) * sqrt(1 / (l * g));
 	double theta_plus = theta_0, omega = omega_0;
 	double t = 0;
 	ofstream f("euler.csv");
 		
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta_plus << "," << omega << endl;
+		f << t << "," << theta_plus << "," << omega << "," << energy_check(theta_plus, omega, m, l, g) << endl;
 
 		t += dt;
 		double theta = theta_plus;
 		theta_plus += omega * dt;
 		omega -= (alpha + theta) * dt;
-
+	
 	}	
+
 
 	f.close();
 
 }
 
 //Single Pendulum Leapfrog Method
-void leapfrog(const double theta_0, const double omega_0, const int n_max,
-	const double dt, const double lambda, const double m, const double l, 
-	const double g) {
+void leapfrog(const double theta_0, const double omega_0, double alpha, double dt,
+	const int n_max, const double g, const double l, const double m) {
 
-	const double alpha = (lambda / m) * sqrt(1 / (l * g));
 	double theta_plus, omega_plus,
 		theta_n = theta_0, omega_n = omega_0;
 	double t = 0;
@@ -65,11 +62,9 @@ void leapfrog(const double theta_0, const double omega_0, const int n_max,
 }
 
 //Single Pendulum RK4 Method
-void rk4(const double theta_0, const double omega_0, const int n_max,
-	const double dt, const double lambda, const double m, const double l, 
-	const double g) {
+void rk4(const double theta_0, const double omega_0, double alpha, double dt,
+	const int n_max, const double g, const double l, const double m) {
 
-	const double alpha = (lambda / m) * sqrt(1 / (l * g));
 	double theta = theta_0, omega = omega_0;
 	double t = 0;
 	ofstream f("rk4.csv");
@@ -103,3 +98,13 @@ void rk4(const double theta_0, const double omega_0, const int n_max,
 
 }
 
+//Energy test
+double energy_check(double theta, double omega, const double g, const double l, const double m) {
+
+	double pe = m * g * (l - l * cos(theta));
+	double ke = 0.5 * m * l * g * pow(omega, 2);
+	double energy = ke + pe;
+
+	return energy;
+
+} 
