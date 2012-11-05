@@ -9,4 +9,4 @@ void rk4(const double, const double, double, double,
 
 
 
-double energy_check(double theta, double omega, const double g, const double l, const double m);
+double get_energy(double theta, double omega, const double g, const double l, const double m);

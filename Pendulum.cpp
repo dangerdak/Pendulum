@@ -13,7 +13,7 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 		
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta_plus << "," << omega << "," << energy_check(theta_plus, omega, m, l, g) << endl;
+		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << endl;
 
 		t += dt;
 		double theta = theta_plus;
@@ -98,11 +98,11 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 
 }
 
-//Energy test
-double energy_check(double theta, double omega, const double g, const double l, const double m) {
+//Energy check 
+double get_energy(double theta, double omega, const double g, const double l, const double m) {
 
-	double pe = m * g * (l - l * cos(theta));
-	double ke = 0.5 * m * l * g * pow(omega, 2);
+	double pe = m * g * l * (1 - cos(theta));
+	double ke = 0.5 * g * l * m * omega * omega;
 	double energy = ke + pe;
 
 	return energy;
