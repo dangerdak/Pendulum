@@ -102,7 +102,7 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 double get_energy(double theta, double omega, const double g, const double l, const double m) {
 
 	double pe = m * g * l * (1 - cos(theta));
-	double ke = 0.5 * g * l * m * omega * omega;
+	double ke = 0.5 * g * l * l * m * omega * omega;
 	double energy = ke + pe;
 
 	return energy;

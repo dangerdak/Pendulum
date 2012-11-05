@@ -1,4 +1,5 @@
 #!/bin/bash
+./Pendulum
 gnuplot -p << EOF
 set datafile separator ','
 set term x11 0
