@@ -42,10 +42,8 @@ void leapfrog(const double theta_0, const double omega_0, double alpha, double d
 		t += dt;
 		
 		if (n==0) {
-			theta_plus = theta_0 + omega_0 * dt;
-			omega_plus = omega_0 - (alpha * omega_0 + theta_0) * dt;
-			theta_n = theta_plus;
-			omega_n = omega_plus;
+			theta_plus = theta_n + omega_n * dt;
+			omega_plus = omega_n - (alpha * omega_n + theta_n) * dt;
 		}
 		else {
 			double theta_minus = theta_n;
