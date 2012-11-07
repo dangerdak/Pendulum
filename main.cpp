@@ -5,14 +5,19 @@ using namespace std;
 
 int main() {
 	
-	const int n_max = 500;
 	const double theta = 0.1, omega = 0;
 	const double gamma = 0.2, m = 1, l = 1, g = 9.8;
 	double alpha = gamma / (m * sqrt(l * g));
 	double dt = alpha;
 
+	const int t_max = 35;
+	double n_max_db = 0.5 + t_max / dt; //find number of iterations from total time wanted. Add 0.5 so conversion to int rounds properly.
+	const int n_max = (int) n_max_db;
+	
 	euler(theta, omega, alpha, dt, n_max, g, l, m);
 	rk4(theta, omega, alpha, dt, n_max, g, l, m);
 	leapfrog(theta, omega, alpha, dt, n_max, g, l, m);
+	
 	return 0;
+	
 }
