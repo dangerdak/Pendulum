@@ -13,7 +13,7 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 		
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << endl;
+		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
 
 		t += dt;
 		double theta = theta_plus;
@@ -42,8 +42,10 @@ void leapfrog(const double theta_0, const double omega_0, double alpha, double d
 		t += dt;
 		
 		if (n==0) {
-			theta_plus = theta_n + omega_n * dt;
-			omega_plus = omega_n - (alpha + theta_n) * dt;
+			theta_plus = theta_0 + omega_0 * dt;
+			omega_plus = omega_0 - (alpha * omega_0 + theta_0) * dt;
+			theta_n = theta_plus;
+			omega_n = omega_plus;
 		}
 		else {
 			double theta_minus = theta_n;
@@ -71,7 +73,7 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 
 	for(int n = 0; n < n_max; n++) {
 
-		f << t << "," << theta << "," << omega << endl;
+		f << t << "," << theta << "," << omega <<  "," << get_energy(theta, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
 		
 		double k1 = omega * dt;
 		double l1 = -(alpha * omega + theta) * dt;

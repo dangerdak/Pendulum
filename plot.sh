@@ -10,4 +10,6 @@ set term x11 2
 plot "$1" using 1:4 with lines
 set term x11 3
 # splot "$1" using 1:2:3 with lines
+set term x11 4 
+plot "$1" using 1:($1-$5) with lines
 EOF
