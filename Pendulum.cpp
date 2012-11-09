@@ -1,6 +1,8 @@
 #include "Pendulum.h"
 #include <fstream>
 #include <cmath>
+#include <iostream>
+
 using namespace std;
 
 //Single Pendulum Euler Method
@@ -101,10 +103,61 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 //Energy check 
 double get_energy(double theta, double omega, const double g, const double l, const double m) {
 
-	double pe = m * g * l * (1 - cos(theta));
+	double pe = m * g * l * (1 - (1 - theta*theta/2));
 	double ke = 0.5 * g * l * l * m * omega * omega;
 	double energy = ke + pe;
 
 	return energy;
 
 } 
+
+//Find maximum in section of array
+double maximum(double *array, int start, int finish) {
+	double max = array[start];
+
+	for(int n = start + 1; n < finish; n++)
+		if (max < array[n])
+			max = array[n];
+	return max;
+}
+
+//Find minimum in section of array
+double minimum(double *array, int start, int finish) {
+	double min = array[start];
+
+	for(int n = start + 1; n < finish; n++)
+		if (min > array[n])
+			min = array[n];
+	return min;
+}
+
+//Find moving average of energy range
+void average_range(const double theta_0, const double omega_0, double alpha, double dt,
+	const int n_max, const double g, const double l, const double m) {
+
+	double theta_plus = theta_0, omega = omega_0;
+	double t = 0;
+	double *energy = new double[n_max];	
+
+	for(int n = 0; n < n_max; n++) {
+		
+		energy[n] = get_energy(theta_plus, omega, m, l, g);
+
+		t += dt;
+		double theta = theta_plus;
+		theta_plus = theta + omega * dt;
+		omega -= (alpha * omega + theta) * dt;
+	
+	}	
+
+	int window = n_max / 100;
+	double *range = new double[n_max - window];
+
+	for(int i = 0; i < n_max - window; i++) {
+
+		range[i] = maximum(energy, i, i + window - 1) - minimum(energy, i, i + window - 1);
+		
+		cout << range[i] << endl;
+	}
+
+}
