@@ -111,7 +111,7 @@ an appropriate method for the double pendulum.
 Euler's method is the simplest method for numerically integrating a 
 system of ODEs with given initial conditions. In this method the value 
 of the derivative at an initial point is used to estimate a new y-value 
-after a small step forward in the x-axis. This apprach works well on
+after a small step forward in the x-axis. This approach works well on
 functions with constant or slowly changing gradients, but for a 
 a function with a rapidly changing gradient (e.g. for an oscilating 
 pendulum) one would not expect this to give very good estimates.
@@ -125,15 +125,18 @@ pendulum) one would not expect this to give very good estimates.
 %	\label{fig:eulerexample}
 %\end{figure}
 
-While a smaller step size does generally improve accuracy, there is 
+While a smaller step size does generally improve accuracy - the smaller 
+the step size, the less the gradient will have changed - there is 
 a limit to this, beyond which the local error will be dominated by 
 another error - the round-off error. A computer can only store a 
 finite number of significant figures, and when it reaches this limit 
 it rounds the number being stored. As a result of this, for a variable 
 stored as type double the smallest useful step size is \(~10^{-8}\).
 
-Using the characteristic equation of the update matrix for our coupled 
-system we can find it's eigenvalues \(\lambda^{1}\) and \(\lambda^{2}\). 
+In order to find the conditions for stability in our system of 
+equations, we can 
+use the characteristic equation to find the eigenvalues 
+\(\lambda^{1}\) and \(\lambda^{2}\). 
 It can be shown that for \(|\lambda^{i}|^{2} \leq 1\) the system is stable.
 (SOURCE???). For Euler's method this results in the stabilty condition
 
@@ -160,7 +163,7 @@ FIGURE??? - do h = 0.00000001 overnight?
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.8\textwidth]{euler_energies.png}
+	\includegraphics[width=0.8\textwidth]{euler_energies_au.png}
 	\caption{Energy for different step sizes dt, with \(\gamma = 0.2\). 
 		Oscillations in the energy are due to the errors in 
 		the estimates at each step. 
@@ -170,6 +173,47 @@ FIGURE??? - do h = 0.00000001 overnight?
 		as we're interested only in relative changes in energy.}
 	\label{fig:econd}
 \end{figure}
+
+
+\section{Leapfrog Method}
+The Leapfrog method uses the location of the previous point and the
+gradient at the current point to predict the location at the next 
+point. As it uses a previous value, it is necessary to store an extra 
+variable for each step. As two points are required to get started, the 
+method starts with one Euler step. This means that the initial estimate 
+may not be very good - so for a chaotic system like the double pendulum 
+the Leapfrog method may not be much better than the Euler method itself.
+
+Using trial and error to find the conditions on stability for this method 
+for a single pendulum, it seems that in the undamped case it is always stable 
+- even for a step size as large as 0.999 the solution is still stable 
+after 300 units of time.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{leapfrog_un_zoom.png}
+	\caption{Stable}
+	\label{fig:leap_un}
+\end{figure}
+
+For growing solutions it is also stable, but for damped solutions it
+is unstable.
+
+
+
+
+
+
+
+\section{Fourth Order Runge-Kutta}
+RK4 uses Euler's method to estimate the solution at 4 points ranging 
+from the starting point to one step ahead. A weighted average 
+of these points then produces an update value.
+
+In the undamped case, by trial and error, it appears to always be stable.
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{thebibliography}{20}

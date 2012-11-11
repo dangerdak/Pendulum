@@ -9,15 +9,17 @@ using namespace std;
 void euler(const double theta_0, const double omega_0, double alpha, double dt,
 	const int n_max, const double g, const double l, const double m) {
 
-	double theta_plus = theta_0, omega = omega_0;
+	double theta_plus = theta_0, omega_plus = omega_0;
 	double t = 0;
 	ofstream f("euler.csv");
 		
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
-
-		euler_update(theta_plus, omega, alpha, t, dt);
+		f << t << "," << theta_plus << "," << omega_plus << "," 
+			<< get_energy(theta_plus, omega_plus, m, l, g) << "," << theta_0 * cos(t) << endl;
+		
+		t += dt;
+		euler_update(theta_plus, omega_plus, alpha, t, dt);
 	}	
 
 
@@ -25,11 +27,11 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 
 }
 //Euler update
-void euler_update(double &theta_plus, double &omega, double alpha, double &t, double dt) {
-	t +=dt;
+void euler_update(double &theta_plus, double &omega_plus, double alpha, double &t, double dt) {
 	double theta = theta_plus;
+	double omega = omega_plus;
 	theta_plus = theta + omega * dt;
-	omega -= (alpha * omega + theta) * dt;
+	omega_plus -= (alpha * omega + theta) * dt;
 }
 
 //Allows energy to be plotted as a function of step size and time, but in damped case energy range is too big to see detail of oscillations
@@ -68,6 +70,7 @@ void leapfrog(const double theta_0, const double omega_0, double alpha, double d
 		
 		f << t << "," << theta_n << "," << omega_n << "," << get_energy(theta_n, omega_n, g, l, m) << endl;
 		
+		t +=dt;
 		leapfrog_update(theta_n, theta_plus, omega_n, omega_plus, alpha, t, dt, n);
 
 	}
@@ -79,11 +82,11 @@ void leapfrog(const double theta_0, const double omega_0, double alpha, double d
 //Leapfrog update
 void leapfrog_update(double &theta_n, double &theta_plus, double &omega_n, double &omega_plus, double alpha, double &t, double dt, int n) {
 	
-	t += dt;
 		
 	if (n==0) {
-		theta_plus = theta_n + omega_n * dt;
-		omega_plus = omega_n - (alpha * omega_n + theta_n) * dt;
+	//	theta_plus = theta_n + omega_n * dt;
+	//	omega_plus = omega_n - (alpha * omega_n + theta_n) * dt;
+		euler_update(theta_n, omega_n, alpha, t, dt);
 		}
 	else {
 		double theta_minus = theta_n;
@@ -136,9 +139,10 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 }
 
 
+//function returns energy of pendulum
 double get_energy(double theta, double omega, const double g, const double l, const double m) {
 
-	double pe = m * g * l * (1 - (1 - theta*theta/2));
+	double pe = m * g * l * (1 - 0.5 * theta * theta);
 	double ke = 0.5 * g * l * l * m * omega * omega;
 	double energy = ke + pe;
 
