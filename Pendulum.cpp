@@ -17,16 +17,23 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 		
 		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
 
-		t += dt;
-		double theta = theta_plus;
-		theta_plus = theta + omega * dt;
-		omega -= (alpha * omega + theta) * dt;
-	
+		//it += dt;
+		//double theta = theta_plus;
+		//theta_plus = theta + omega * dt;
+		//omega -= (alpha * omega + theta) * dt;
+		euler_update(theta_plus, omega, alpha, t, dt);
 	}	
 
 
 	f.close();
 
+}
+//Euler update
+void euler_update(double &theta_plus, double &omega, double alpha, double &t, double dt) {
+	t +=dt;
+	double theta = theta_plus;
+	theta_plus = theta + omega * dt;
+	omega -= (alpha * omega + theta) * dt;
 }
 
 //Single Pendulum Leapfrog Method
@@ -150,7 +157,7 @@ void euler_range(const double theta_0, const double omega_0, double alpha, doubl
 	
 	}	
 
-	ofstream f("euler_range.csv");
+	ofstream f("energy_range.csv");
 	int window = n_max / 100;
 	double *range = new double[n_max - window];
 
@@ -178,7 +185,7 @@ void dbpend(const double theta_0, double alpha, const double dt, const double n_
 	double t = 0;
 
 	ofstream f("dbpend.csv");
-	ofstream file("kvalues.csv");
+	//ofstream file("kvalues.csv");
 
 	for(int n = 1; n < n_max; n++) {	
 		
@@ -186,9 +193,8 @@ void dbpend(const double theta_0, double alpha, const double dt, const double n_
 
 		fill_k(theta, phi, omega, v, k, alpha, dt, R);
 	
-
-	//debug - checking k values
-	file << k[0] << "," << k[1] << "," << k[2] << "," << k[3] << endl;
+		//debug - checking k values
+		//file << k[0] << "," << k[1] << "," << k[2] << "," << k[3] << endl;
 
 		theta += k[0];
 		phi += k[1];
@@ -199,7 +205,7 @@ void dbpend(const double theta_0, double alpha, const double dt, const double n_
 	}
 
 	f.close();
-	file.close();
+	//file.close();
 
 }
 

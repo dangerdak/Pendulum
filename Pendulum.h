@@ -2,6 +2,8 @@
 void euler(const double theta_0, const double omega_0, double alpha, double dt,
 	const int n_max, const double g, const double l, const double m);
 
+void euler_update(double &theta_plus, double &omega, double alpha, double &t, double dt);
+	
 //implement leapfrog method for single pendulum
 void leapfrog(const double theta_0, const double omega_0, double alpha, double dt,
 	const int n_max, const double g, const double l, const double m);
