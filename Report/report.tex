@@ -132,41 +132,44 @@ finite number of significant figures, and when it reaches this limit
 it rounds the number being stored. As a result of this, for a variable 
 stored as type double the smallest useful step size is \(~10^{-8}\).
 
-First by trial and error we find that the undamped case is unstable 
-even for the minimum-error case.
-In the undamped case even for step size as small as h = 0.00001, 
-a graph of energy against time clearly shows increasing oscillation 
-amplitudes.
-FIGURE??? - do h = 0.00000001 overnight?
-
-In the damped case, with \(\gamma = 0.2\), we again look for a 
-stability condition by trial and error. Below is a graph showing the 
-energy against time for various step sizes, including the one which, by
-eye, appears to be the limiting case for stability. 
-
-\begin{figure}{htb}
-	\centering
-	\includegraphics[width=0.8\textwidth]{euler_energies.png}
-	\caption{Energy for different step sizes dt, with \(\gamma = 0.2\). 
-		Step size of dt = 0.2 looks like a good guess 
-		for the limiting value for stability. Units aren't included 
-		as we're interested in relative changes in energy.}
-	\label{fig:eulercond}
-\end{figure}
-
 Using the characteristic equation of the update matrix for our coupled 
 system we can find it's eigenvalues \(\lambda^{1}\) and \(\lambda^{2}\). 
 It can be shown that for \(|\lambda^{i}|^{2} \leq 1\) the system is stable.
 (SOURCE???). For Euler's method this results in the stabilty condition
 
 \begin{equation}
-	\label{eq:stab}
+	\label{eq:econd}
 	h \leq G
 \end{equation}
 
 where \(h\) is the step size.
 From this it's clear that for an undamped system (in which \(G=0\))
 Euler's method is always unstable, as the step size is always positive.
+
+Looking at the energy of the damped system
+we find that, as expected, the oscillations 
+appear to remain constant in the limiting case of \(h = G\). For step 
+sizes above this the oscillations increase in amplitude over time 
+and below this the oscillations 
+decrease (see figure~\ref{fig:econd}).
+
+In the undamped case even for step size as small as h = 0.00001, 
+a graph of energy against time clearly shows increasing oscillation 
+amplitudes.
+FIGURE??? - do h = 0.00000001 overnight?
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{euler_energies.png}
+	\caption{Energy for different step sizes dt, with \(\gamma = 0.2\). 
+		Oscillations in the energy are due to the errors in 
+		the estimates at each step. 
+		Overall changes in energy are caused by damping.
+		Step size of dt = 0.2 looks like a good value for 
+		the limiting case of stability. Units aren't included 
+		as we're interested only in relative changes in energy.}
+	\label{fig:econd}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{thebibliography}{20}

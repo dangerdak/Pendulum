@@ -4,9 +4,16 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 
 void euler_update(double &theta_plus, double &omega, double alpha, double &t, double dt);
 	
+//step energy
+void step_energy(double theta, double omega, const int m, const int l, const double g, double alpha, double dt, const int t_max);
+	
 //implement leapfrog method for single pendulum
 void leapfrog(const double theta_0, const double omega_0, double alpha, double dt,
 	const int n_max, const double g, const double l, const double m);
+
+void leapfrog_update(double &theta_n, double &theta_plus, double &omega_n, double &omega_plus, 
+		double alpha, double &t, double dt, int n);
+	
 
 //implement rk4 method for single pendulum
 void rk4(const double theta_0, const double omega_0, double alpha, double dt,
@@ -21,7 +28,7 @@ void euler_range(const double theta_0, const double omega_0, double alpha, doubl
 	const int n_max, const double g, const double l, const double m);
 
 //implement rk4 for a double pendulum
-void dbpend(const double theta_0, double alpha, const double dt, const double n_max, const double M, 
+void dbpend(const double theta_0, double alpha, double dt, const double n_max, const double M, 
 		const double m);
 
 //find update (k) values for double pendulum rk4 method

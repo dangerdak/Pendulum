@@ -17,10 +17,6 @@ void euler(const double theta_0, const double omega_0, double alpha, double dt,
 		
 		f << t << "," << theta_plus << "," << omega << "," << get_energy(theta_plus, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
 
-		//it += dt;
-		//double theta = theta_plus;
-		//theta_plus = theta + omega * dt;
-		//omega -= (alpha * omega + theta) * dt;
 		euler_update(theta_plus, omega, alpha, t, dt);
 	}	
 
@@ -36,9 +32,32 @@ void euler_update(double &theta_plus, double &omega, double alpha, double &t, do
 	omega -= (alpha * omega + theta) * dt;
 }
 
+//Allows energy to be plotted as a function of step size and time, but in damped case energy range is too big to see detail of oscillations
+void step_energy(double theta, double omega, const int m, const int l, const double g, double alpha, double dt, const int t_max) {
+	int h_max = 7;
+	ofstream stepfile("euler_step.csv");
+	
+	for(int h = 0; h <h_max; h++) {
+		double omega_plus = omega;
+		double theta_plus = theta;
+		double t = 0.0;
+
+		double n_max_db = 0.5 + t_max / dt; 
+		int n_max = (int) n_max_db;
+
+		for(int i = 0; i < n_max; i++) {
+			euler_update(theta_plus, omega_plus, alpha, t, dt);
+			stepfile << t << "," << dt << "," << get_energy(theta_plus, omega_plus, g, l, m) << endl;
+		}
+	dt += 0.001;	
+	}
+	stepfile.close();
+
+}
+
 //Single Pendulum Leapfrog Method
 void leapfrog(const double theta_0, const double omega_0, double alpha, double dt,
-	const int n_max, const double g, const double l, const double m) {
+	const int n_max, const double g, const int l, const int m) {
 
 	double theta_plus, omega_plus,
 		theta_n = theta_0, omega_n = omega_0;
@@ -47,26 +66,35 @@ void leapfrog(const double theta_0, const double omega_0, double alpha, double d
 	
 	for(int n = 0; n < n_max; n++) {
 		
-		f << t << "," << theta_n << "," << omega_n << "," << get_energy(theta_n, omega_n, m, l, g) << endl;
-		t += dt;
+		f << t << "," << theta_n << "," << omega_n << "," << get_energy(theta_n, omega_n, g, l, m) << endl;
 		
-		if (n==0) {
-			theta_plus = theta_n + omega_n * dt;
-			omega_plus = omega_n - (alpha * omega_n + theta_n) * dt;
-		}
-		else {
-			double theta_minus = theta_n;
-			double omega_minus = omega_n;
-			theta_n = theta_plus;
-			omega_n = omega_plus;
+		leapfrog_update(theta_n, theta_plus, omega_n, omega_plus, alpha, t, dt, n);
 
-			theta_plus = theta_minus + 2 * omega_n * dt;
-			omega_plus = omega_minus - 2 * (alpha * omega_n + theta_n) * dt; 	
-		}
-	
 	}
 
 	f.close();
+
+}
+
+//Leapfrog update
+void leapfrog_update(double &theta_n, double &theta_plus, double &omega_n, double &omega_plus, double alpha, double &t, double dt, int n) {
+	
+	t += dt;
+		
+	if (n==0) {
+		theta_plus = theta_n + omega_n * dt;
+		omega_plus = omega_n - (alpha * omega_n + theta_n) * dt;
+		}
+	else {
+		double theta_minus = theta_n;
+		double omega_minus = omega_n;
+		theta_n = theta_plus;
+		omega_n = omega_plus;
+
+		theta_plus = theta_minus + 2 * omega_n * dt;
+		omega_plus = omega_minus - 2 * (alpha * omega_n + theta_n) * dt; 	
+
+		}
 
 }
 
@@ -80,7 +108,7 @@ void rk4(const double theta_0, const double omega_0, double alpha, double dt,
 
 	for(int n = 0; n < n_max; n++) {
 
-		f << t << "," << theta << "," << omega <<  "," << get_energy(theta, omega, m, l, g) << "," << theta_0 * cos(t) << endl;
+		f << t << "," << theta << "," << omega <<  "," << get_energy(theta, omega, g, l, m) << "," << theta_0 * cos(t) << endl;
 		
 		double k1 = omega * dt;
 		double l1 = -(alpha * omega + theta) * dt;
